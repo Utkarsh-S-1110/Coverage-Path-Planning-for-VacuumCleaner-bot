@@ -1,3 +1,4 @@
+import math
 class VacuumCleaner:
     
 # This method is to initialize the environment
@@ -5,10 +6,10 @@ class VacuumCleaner:
         self.maxX=maxX_p
         self.maxY=maxY_p
         self.side=side_p
-        a=int(self.side/2)
-        area_square=self.side*self.side
-        self.radius=radius_p
-        area_cyl= 4*self.radius*self.radius 
+        a=self.side/2
+        area_square=0
+        radius=radius_p
+        area_cyl= 0 
         self.cube_centre=cube_centre_p
         self.cylinder_centre=cylinder_centre_p
         self.current_vertical=1
@@ -18,8 +19,6 @@ class VacuumCleaner:
         self.moves=[]
         self.moves_complete=[]
         self.grids_covered= []
-        self.grids_to_cover= ((self.maxX*self.maxY)-(area_square*(len(self.cube_centre)))-(area_cyl*(len(self.cylinder_centre))))
-        print(self.grids_to_cover)
         self.forbidden=[[-1]*(self.maxX+2) for _ in range((self.maxY+2))]
         for i in range(0,(int(self.maxX)+2)):
             self.forbidden[0].pop(0)
@@ -36,15 +35,40 @@ class VacuumCleaner:
         self.forbidden[(self.maxY)+1].remove((self.maxY)+1)   
         self.forbidden[(self.maxY)+1].append(1) 
         for l in self.cube_centre:
-            for m in range(int(l[1])-a,(int(l[1])+(a-1)+1)):
-                for k in range(int(l[0])-a,(int(l[0])+(a-1)+1)):
-                    self.forbidden[m].pop(0)
-                    self.forbidden[m].append(k)
+            for m in range(int(math.ceil(l[1]-a)),int(math.floor(l[1]+(a-1)+1))):
+                for k in range(int(math.ceil(l[0]-a)),int(math.floor(l[0]+(a-1)+1))):
+                    if k not in self.forbidden[m]:
+                        area_square+=1
+                        self.forbidden[m].pop(0)
+                        self.forbidden[m].append(k)
         for l in self.cylinder_centre:
-            for m in range(int(l[1])-self.radius,(int(l[1])+(self.radius-1)+1)):
-                for k in range(int(l[0])-self.radius,(int(l[0])+(self.radius-1)+1)):
-                    self.forbidden[m].pop(0)
-                    self.forbidden[m].append(k)  
+            for m in range(int(math.ceil(l[1]-radius)),int(math.floor(l[1]+(radius-1)+1))):
+                for k in range(int(math.ceil(l[0]-radius)),int(math.floor(l[0]+(radius-1)+1))):
+                    if (m>=l[1]) and (k>=l[0]):
+                        if((pow((l[0]-k),2)+pow((l[1]-m),2))<pow(radius,2)):
+                            if k not in self.forbidden[m]:
+                                area_cyl+=1
+                                self.forbidden[m].pop(0)
+                                self.forbidden[m].append(k)  
+                    elif (m>=l[1]) and (k<=l[0]):
+                        if((pow((l[0]-k-1),2)+pow((l[1]-m),2))<pow(radius,2)):
+                            if k not in self.forbidden[m]:
+                                area_cyl+=1
+                                self.forbidden[m].pop(0)
+                                self.forbidden[m].append(k)
+                    elif (m<=l[1]) and (k<=l[0]):
+                        if((pow((l[0]-k-1),2)+pow((l[1]-m-1),2))<pow(radius,2)):
+                            if k not in self.forbidden[m]:
+                                area_cyl+=1
+                                self.forbidden[m].pop(0)
+                                self.forbidden[m].append(k)
+                    else :
+                        if((pow((l[0]-k),2)+pow((l[1]-m-1),2))<pow(radius,2)):
+                            if k not in self.forbidden[m]:
+                                area_cyl+=1
+                                self.forbidden[m].pop(0)
+                                self.forbidden[m].append(k)
+        self.grids_to_cover= ((self.maxX*self.maxY)-area_square-area_cyl)  
          
 # This function checks if a robot can make a left turn or not            
     def left_is_free(self):
@@ -164,6 +188,4 @@ def main():                                                           # Change t
     obj.moves_complete.append([obj.current_horizontal,obj.current_vertical])
     print(obj.moves_complete)
         
-main()                          # The program will print a list containing all the co-ordinates of the grid that the robot has visited and in the manner it has visited
-                                # Each grid is of 1*1 unit
-                                # Bottom left corner of each grid will be the co-ordinate of that grid and co-ordinate of starting grid is [1,1]
+main() 
