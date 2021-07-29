@@ -253,7 +253,7 @@ class VacuumCleaner:
             self.rot.angular.z=0.0
             rospy.loginfo(self.rot)
             self.pub.publish(self.rot)
-            time.sleep(4.59*3/2)
+            time.sleep(4.58*3/2)
             self.rest()
             self.facing_left=1
             
@@ -262,7 +262,7 @@ class VacuumCleaner:
             self.rot.angular.z=0.0
             rospy.loginfo(self.rot)
             self.pub.publish(self.rot)
-            time.sleep(4.59*3/2)
+            time.sleep(4.58*3/2)
             self.rest()
 
         elif self.facing_left == -1:
@@ -302,7 +302,7 @@ class VacuumCleaner:
             self.rot.angular.z=0.0
             rospy.loginfo(self.rot)
             self.pub.publish(self.rot)
-            time.sleep(4.59*3/2)
+            time.sleep(4.58*3/2)
             self.rest()
             self.facing_right=1
             
@@ -312,7 +312,7 @@ class VacuumCleaner:
             self.rot.angular.z=0.0
             rospy.loginfo(self.rot)
             self.pub.publish(self.rot)
-            time.sleep(4.59*3/2)
+            time.sleep(4.58*3/2)
             self.rest()
         
         elif self.facing_right == -1:
