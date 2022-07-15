@@ -1,4 +1,4 @@
-# VacuumCleaner
+# Coverage Path Planning for VacuumCleaner bot
 This is a project for probation period of 'Team Robocon'.<br />
 To test the path planning code for any shortcomings, please run the file in the Test_without_simulation folder. It will print the co-ordinates of all the grids that the bot will travel to cover the desired area.<br />
 Please change the values in the main method of the function to set up different scenarios for the bot. <br />
